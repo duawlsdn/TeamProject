@@ -5,6 +5,17 @@ function Cart() {
 
   const total = cartItems.reduce( (sum, item) => sum + item.price * item.quantity, 0);
 
+  const handleDecrease = (index, currentQty) => {
+    if (currentQty > 1) {
+      updateQuantity(index, currentQty - 1);
+    } else {
+      removeItem(index); // 1에서 - 누르면 삭제
+    }
+  };
+
+  const handleIncrease = (index, currentQty) => {
+    updateQuantity(index, currentQty + 1);
+  };
 
   return (
     <div style={{ padding: "150px" }}>
@@ -13,23 +24,20 @@ function Cart() {
       {cartItems.length === 0 ? (
         <p>장바구니가 비어있습니다.</p>
       ) : (
-        <ul>
+        <ul className="cart-list">
           {cartItems.map((item, index) => (
-            <li key={index} style={{ marginBottom: "20px" }}>
+            <li key={index} className="cart-item">
               <strong>{item.name}</strong><br />
-              가격: {item.price.toLocaleString()}원 × {" "}
-              <input
-                type="number"
-                value={item.quantity}
-                min="1"
-                style={{ width: "50px" }}
-                onChange={(e) =>
-                  updateQuantity(index, parseInt(e.target.value))
-                }
-              />{" "}
-              = {(item.price * item.quantity).toLocaleString()}원
-              <br />
-              <button onClick={() => removeItem(index)}>❌ 삭제</button>
+              가격: {item.price.toLocaleString()}원
+              <div>
+                <button onClick={() => handleDecrease(index, item.quantity)}>➖</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleIncrease(index, item.quantity)}>➕</button>
+              </div>     
+
+              <button onClick={() => removeItem(index)} style={{ marginTop: "10px" }}>
+                ❌ 삭제
+              </button>
             </li>
           ))}
         </ul>

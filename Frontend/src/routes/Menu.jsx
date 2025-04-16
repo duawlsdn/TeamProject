@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getDrinks, getDesserts, createOrder } from "../api/menuApi";
-import { Button } from "@mui/material";
+    import { useState } from "react";
+    import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+    import { getDrinks, getDesserts, createOrder } from "../api/menuApi";
+    import "../css/menu.css";
+    import Footer from "./footer";
 
-function Menu() {
+    function Menu() {
     const [activeTab, setActiveTab] = useState("coffee");
     const queryClient = useQueryClient();
 
@@ -50,39 +51,28 @@ function Menu() {
     const renderItems = () => {
         const items = activeTab === "coffee" ? drinks : desserts;
         if (!items) return null;
-        return items.map((item) => (
-            <button
+        return (
+            <div className="menu-grid">
+            {items.map((item) => (
+                <button
                 key={item.id}
                 onClick={() => handleOrder(item, activeTab === "coffee" ? "DRINK" : "DESSERT")}
-            >
-                {item.image ? (
-                    <img
-                        src={item.image}
-                        alt={item.name}
-                        style={{ width: "150px", height: "150px", objectFit: "cover" }}
+                className="menu-card"
+                >
+                <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{ width: `${item.width}px`, height: `${item.height}px` }}
                     />
-                ) : (
-                    <div
-                        style={{
-                            width: "150px",
-                            height: "150px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: "#5f5f5f",
-                            borderRadius: "5px",
-                        }}
-                    >
-                        No Image
-                    </div>
-                )}
-                <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <p>
                     {item.name}
                     <br />
                     {(item.basePrice || item.price).toLocaleString()} 원
-                </div>
+                </p>
             </button>
-        ));
+        ))}
+        </div>
+    );
     };
 
     if (drinksLoading || dessertsLoading) {
@@ -95,26 +85,28 @@ function Menu() {
 
     return (
         <div>
-            <div style={{ marginBottom: "16px" }}>
-                <Button
-                    variant={activeTab === "coffee" ? "contained" : "outlined"}
+            <div>
+                <div className="tab-container">
+                <input type="radio" name="tab" id="tab1" className="tab tab--1" />
+                <label className="tab_label" htmlFor="tab1"
                     onClick={() => setActiveTab("coffee")}
-                    style={{ marginRight: "8px" }}
                 >
-                    ☕ Coffee
-                </Button>
-                <Button
-                    variant={activeTab === "dessert" ? "contained" : "outlined"}
+                    ☕ coffee
+                </label>
+                <input type="radio" name="tab" id="tab2" className="tab tab--2" />
+                <label className="tab_label" htmlFor="tab2"
                     onClick={() => setActiveTab("dessert")}
                 >
-                    🍰 Dessert
-                </Button>
+                    🍰 dessert
+                </label>
+
+                <div className="indicator"></div>
+                </div>
             </div>
-            <div>
-                {renderItems()}
-            </div>
+            <div>{renderItems()}</div>
+            <Footer />
         </div>
     );
-}
+    }
 
-export default Menu;
+    export default Menu;

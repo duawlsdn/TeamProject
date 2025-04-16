@@ -7,6 +7,7 @@
     function Menu() {
     const [activeTab, setActiveTab] = useState("coffee");
     const queryClient = useQueryClient();
+    const BACKEND_URL = "http://localhost:8080";
 
     // 음료 데이터 가져오기
     const {
@@ -60,8 +61,9 @@
                 className="menu-card"
                 >
                 <img
-                    src={item.image}
+                    src={`${BACKEND_URL}${item.image}`}
                     alt={item.name}
+                    loading="lazy"
                     style={{ width: `${item.width}px`, height: `${item.height}px` }}
                     />
                 <p>

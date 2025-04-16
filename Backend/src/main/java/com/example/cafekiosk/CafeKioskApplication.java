@@ -27,16 +27,16 @@ public class CafeKioskApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        drinkRepository.save(new Drink("아메리카노", "americano", 3000, ""));
-        drinkRepository.save(new Drink("카페 라떼", "cafe-latte", 3500, ""));
-        drinkRepository.save(new Drink("바닐라 라떼", "vanilla-latte", 3800, ""));
-        drinkRepository.save(new Drink("캬라멜 마끼아또", "caramel-macchiato", 4000, ""));
-        drinkRepository.save(new Drink("카푸치노", "cappuccino", 3700, ""));
+        drinkRepository.save(new Drink("아메리카노", "americano", 3000, "/images/Americano.jpg"));
+        drinkRepository.save(new Drink("카페 라떼", "cafe-latte", 3500, "/images/cafelatte.jpg"));
+        drinkRepository.save(new Drink("바닐라 라떼", "vanilla-latte", 3800, "/images/vanillalatte.jpg"));
+        drinkRepository.save(new Drink("캬라멜 마끼아또", "caramel-macchiato", 4000, "/images/caramelmacchiato.jpg"));
+        drinkRepository.save(new Drink("카푸치노", "cappuccino", 3700, "/images/cappuccino.jpg"));
 
-        dessertRepository.save(new Dessert("초콜릿 케이크", 4300, ""));
-        dessertRepository.save(new Dessert("치즈 케이크", 4000, ""));
-        dessertRepository.save(new Dessert("당근 케이크", 3800, ""));
-        dessertRepository.save(new Dessert("마카롱", 2000, ""));
+        dessertRepository.save(new Dessert("초콜릿 케이크", 4300, "/images/chocolatecake.jpg"));
+        dessertRepository.save(new Dessert("치즈 케이크", 4000, "/images/cheesecake.jpg"));
+        dessertRepository.save(new Dessert("당근 케이크", 3800, "/images/carrotcake.jpg"));
+        dessertRepository.save(new Dessert("마카롱", 2000, "/images/macaroon.jpg"));
 
         for (Drink drink : drinkRepository.findAll()) {
             LOGGER.info("Drink: name={}, path={}, price={}",

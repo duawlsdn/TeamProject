@@ -59,89 +59,43 @@ function Cart({ isFooter = false }) {
   };
 
   return (
-    <div
-      style={{
-        padding: isFooter ? '10px' : '150px',
-        backgroundColor: isFooter ? '#f8f8f8' : 'transparent',
-        maxHeight: isFooter ? '200px' : 'none',
-        overflowY: isFooter ? 'auto' : 'visible',
-      }}
-    >
-      <h2 style={{ fontSize: isFooter ? '1.2rem' : '1.5rem', marginBottom: '10px' }}>
-        🛒 장바구니
-      </h2>
+    <div>
+      <h2>🛒 장바구니</h2>
 
       {cartItems.length === 0 ? (
-        <p style={{ fontSize: isFooter ? '0.9rem' : '1rem' }}>
+        <p>
           장바구니가 비어있습니다.
         </p>
       ) : (
-        <ul
-          className="cart-list"
-          style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-          }}
-        >
+        <ul className="cart-list">
           {cartItems.map((item, index) => (
             <li
               key={`${item.name}-${item.type}-${index}`}
               className="cart-item"
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '5px 0',
-                borderBottom: '1px solid #ddd',
-                fontSize: isFooter ? '0.9rem' : '1rem',
-              }}
             >
               <div>
                 <strong>{item.name || 'Unknown Item'}</strong>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '5px' }}>
+                <div>
                   <button
                     onClick={() => handleDecrease(index)}
-                    style={{
-                      padding: '2px 8px',
-                      fontSize: isFooter ? '0.8rem' : '1rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      backgroundColor: '#f0f0f0',
-                    }}
                   >
                     ➖
                   </button>
-                  <span style={{ minWidth: '20px', textAlign: 'center' }}>
+                  <span>
                     {item.quantity || 1}
                   </span>
                   <button
                     onClick={() => handleIncrease(index)}
-                    style={{
-                      padding: '2px 8px',
-                      fontSize: isFooter ? '0.8rem' : '1rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      backgroundColor: '#f0f0f0',
-                    }}
                   >
                     ➕
                   </button>
                   <button
                     onClick={() => removeItem(index)}
-                    style={{
-                      padding: '2px 8px',
-                      fontSize: isFooter ? '0.8rem' : '1rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      backgroundColor: '#f0f0f0',
-                      color: 'red',
-                    }}
                   >
                     ❌
                   </button>
                 </div>
-                <div style={{ marginTop: '5px' }}>
+                <div>
                   가격: {(item.price || 0).toLocaleString()}원
                 </div>
               </div>
@@ -152,21 +106,12 @@ function Cart({ isFooter = false }) {
 
       {cartItems.length > 0 && (
         <>
-          <hr style={{ margin: '10px 0' }} />
-          <h3 style={{ fontSize: isFooter ? '1rem' : '1.2rem' }}>
+          <hr />
+          <h3>
             총 합계: {total.toLocaleString()}원
           </h3>
           <button
             onClick={handleOrderSubmit}
-            style={{
-              marginTop: '10px',
-              padding: '5px 10px',
-              backgroundColor: '#007bff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: isFooter ? '0.9rem' : '1rem',
-            }}
           >
             ✅ 주문하기
           </button>

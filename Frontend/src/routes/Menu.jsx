@@ -31,13 +31,8 @@ function Menu() {
     queryFn: getDesserts,
   });
 
-  // 디버깅 로그 추가
-  console.log('Drinks data:', drinks);
-  console.log('Desserts data:', desserts);
-
   // cartItems 변경 시 로그 추가
   useEffect(() => {
-    console.log('Menu component - cartItems updated:', cartItems);
   }, [cartItems]);
 
   // 상품 클릭 시 장바구니에 추가
@@ -46,16 +41,7 @@ function Menu() {
       name: item.name || 'Unknown Item',
       price: item.basePrice || item.price || item.cost || item.value || 0,
       type: type.toUpperCase(), // DRINK 또는 DESSERT
-      temperature: type === "coffee" ? "Ice" : undefined, // 기본값 (coffee에만 적용)
-      size: type === "coffee" ? "Short" : undefined,     // 기본값 (coffee에만 적용)
-      shot: type === "coffee" ? "기본" : undefined,      // 기본값 (coffee에만 적용)
-      syrup: type === "coffee" ? "기본" : undefined,     // 기본값 (coffee에만 적용)
     };
-    console.log('Calling addToCart with:', cartItem);
-    if (!cartItem.price) {
-      console.error('Price is undefined for item:', item);
-      return;
-    }
     addToCart(cartItem);
 
     // 피드백 메시지
@@ -66,10 +52,8 @@ function Menu() {
   const renderItems = () => {
     const items = activeTab === "coffee" ? drinks : desserts;
     if (!items) {
-      console.log('Items are undefined for tab:', activeTab);
       return null;
     }
-    console.log('Rendering items:', items);
     return (
       <div className="menu-grid">
         {items.map((item) => (

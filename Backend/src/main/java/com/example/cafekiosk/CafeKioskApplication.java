@@ -32,11 +32,21 @@ public class CafeKioskApplication implements CommandLineRunner{
         drinkRepository.save(new Drink("바닐라 라떼", "vanilla-latte", 3800, "/images/vanillalatte.jpg"));
         drinkRepository.save(new Drink("캬라멜 마끼아또", "caramel-macchiato", 4000, "/images/caramelmacchiato.jpg"));
         drinkRepository.save(new Drink("카푸치노", "cappuccino", 3700, "/images/cappuccino.jpg"));
+        drinkRepository.save(new Drink("테스트", "cappuccino", 3700, "/images/cappuccino.jpg"));
+        drinkRepository.save(new Drink("테스트1", "cappuccino", 3700, "/images/cappuccino.jpg"));
+        drinkRepository.save(new Drink("테스트2", "cappuccino", 3700, "/images/cappuccino.jpg"));
+        drinkRepository.save(new Drink("테스트3", "cappuccino", 3700, "/images/cappuccino.jpg"));
+        drinkRepository.save(new Drink("테스트4", "cappuccino", 3700, "/images/cappuccino.jpg"));
 
         dessertRepository.save(new Dessert("초콜릿 케이크", 4300, "/images/chocolatecake.jpg"));
         dessertRepository.save(new Dessert("치즈 케이크", 4000, "/images/cheesecake.jpg"));
         dessertRepository.save(new Dessert("당근 케이크", 3800, "/images/carrotcake.jpg"));
         dessertRepository.save(new Dessert("마카롱", 2000, "/images/macaroon.jpg"));
+        dessertRepository.save(new Dessert("테스트", 2000, "/images/macaroon.jpg"));
+        dessertRepository.save(new Dessert("테스트1", 2000, "/images/macaroon.jpg"));
+        dessertRepository.save(new Dessert("테스트2", 2000, "/images/macaroon.jpg"));
+        dessertRepository.save(new Dessert("테스트3", 2000, "/images/macaroon.jpg"));
+        dessertRepository.save(new Dessert("테스트4", 2000, "/images/macaroon.jpg"));
 
         for (Drink drink : drinkRepository.findAll()) {
             LOGGER.info("Drink: name={}, path={}, price={}",

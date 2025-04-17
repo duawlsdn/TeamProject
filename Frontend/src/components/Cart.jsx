@@ -1,22 +1,29 @@
 import { useCart } from '../components/CartContext';
+import { useEffect } from 'react';
 
-function Cart() {
+function Cart({ isFooter = false }) {
   const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
 
-  console.log('cartItems:', cartItems); // 디버깅 로그
+  useEffect(() => {
+    console.log('Cart component re-rendered with cartItems:', cartItems);
+  }, [cartItems]);
 
   const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
     0
   );
 
   const handleDecrease = (index) => {
-    const currentQty = cartItems[index].quantity;
-    updateQuantity(index, currentQty - 1);
+    const currentQty = cartItems[index].quantity || 1;
+    if (currentQty > 1) {
+      updateQuantity(index, currentQty - 1);
+    } else {
+      removeItem(index);
+    }
   };
 
   const handleIncrease = (index) => {
-    const currentQty = cartItems[index].quantity;
+    const currentQty = cartItems[index].quantity || 1;
     updateQuantity(index, currentQty + 1);
   };
 
@@ -29,7 +36,7 @@ function Cart() {
         },
         body: JSON.stringify({
           items: cartItems.map((item) => ({
-            itemId: item.id,
+            itemId: item.id || item.name,
             name: item.name,
             quantity: item.quantity,
             price: item.price,
@@ -52,41 +59,118 @@ function Cart() {
   };
 
   return (
-    <div style={{ padding: '150px' }}>
-      <h2>🛒 장바구니</h2>
+    <div
+      style={{
+        padding: isFooter ? '10px' : '150px',
+        backgroundColor: isFooter ? '#f8f8f8' : 'transparent',
+        maxHeight: isFooter ? '200px' : 'none',
+        overflowY: isFooter ? 'auto' : 'visible',
+      }}
+    >
+      <h2 style={{ fontSize: isFooter ? '1.2rem' : '1.5rem', marginBottom: '10px' }}>
+        🛒 장바구니
+      </h2>
 
       {cartItems.length === 0 ? (
-        <p>장바구니가 비어있습니다.</p>
+        <p style={{ fontSize: isFooter ? '0.9rem' : '1rem' }}>
+          장바구니가 비어있습니다.
+        </p>
       ) : (
-        <ul className="cart-list">
+        <ul
+          className="cart-list"
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+          }}
+        >
           {cartItems.map((item, index) => (
-            <li key={item.id || index} className="cart-item">
-              <strong>{item.name}</strong>
-              <br />
-              가격: {item.price.toLocaleString()}원
+            <li
+              key={`${item.name}-${item.type}-${index}`}
+              className="cart-item"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '5px 0',
+                borderBottom: '1px solid #ddd',
+                fontSize: isFooter ? '0.9rem' : '1rem',
+              }}
+            >
               <div>
-                <button onClick={() => handleDecrease(index)}>➖</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => handleIncrease(index)}>➕</button>
+                <strong>{item.name || 'Unknown Item'}</strong>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '5px' }}>
+                  <button
+                    onClick={() => handleDecrease(index)}
+                    style={{
+                      padding: '2px 8px',
+                      fontSize: isFooter ? '0.8rem' : '1rem',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      backgroundColor: '#f0f0f0',
+                    }}
+                  >
+                    ➖
+                  </button>
+                  <span style={{ minWidth: '20px', textAlign: 'center' }}>
+                    {item.quantity || 1}
+                  </span>
+                  <button
+                    onClick={() => handleIncrease(index)}
+                    style={{
+                      padding: '2px 8px',
+                      fontSize: isFooter ? '0.8rem' : '1rem',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      backgroundColor: '#f0f0f0',
+                    }}
+                  >
+                    ➕
+                  </button>
+                  <button
+                    onClick={() => removeItem(index)}
+                    style={{
+                      padding: '2px 8px',
+                      fontSize: isFooter ? '0.8rem' : '1rem',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      backgroundColor: '#f0f0f0',
+                      color: 'red',
+                    }}
+                  >
+                    ❌
+                  </button>
+                </div>
+                <div style={{ marginTop: '5px' }}>
+                  가격: {(item.price || 0).toLocaleString()}원
+                </div>
               </div>
-              <button
-                onClick={() => removeItem(index)}
-                style={{ marginTop: '10px' }}
-              >
-                ❌ 삭제
-              </button>
             </li>
           ))}
         </ul>
       )}
 
-      <hr />
-      <h3>총 합계: {total.toLocaleString()}원</h3>
-
       {cartItems.length > 0 && (
-        <button onClick={handleOrderSubmit} style={{ marginTop: '20px' }}>
-          ✅ 주문하기
-        </button>
+        <>
+          <hr style={{ margin: '10px 0' }} />
+          <h3 style={{ fontSize: isFooter ? '1rem' : '1.2rem' }}>
+            총 합계: {total.toLocaleString()}원
+          </h3>
+          <button
+            onClick={handleOrderSubmit}
+            style={{
+              marginTop: '10px',
+              padding: '5px 10px',
+              backgroundColor: '#007bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: isFooter ? '0.9rem' : '1rem',
+            }}
+          >
+            ✅ 주문하기
+          </button>
+        </>
       )}
     </div>
   );

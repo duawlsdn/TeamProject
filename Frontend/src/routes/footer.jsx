@@ -1,10 +1,10 @@
-import '../css/footer.css'; 
-import Cart from './../components/Cart';
+import '../css/footer.css';
+import Cart from '../components/Cart';
 
 const Footer = () => {
   return (
     <footer className="footer">
-      <Cart />
+      <Cart isFooter={true} />
     </footer>
   );
 };

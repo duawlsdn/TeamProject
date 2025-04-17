@@ -1,20 +1,31 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
+  useEffect(() => {
+    console.log('CartItems state updated:', cartItems);
+  }, [cartItems]);
+
   const addToCart = (newItem) => {
-    console.log('Adding to cart:', newItem); // 디버깅 로그
+    console.log('addToCart called with:', newItem);
     setCartItems((prevItems) => {
-      const index = prevItems.findIndex((item) => item.id === newItem.id);
+      // name과 type을 함께 비교하여 중복 항목 확인
+      const index = prevItems.findIndex(
+        (item) => item.name === newItem.name && item.type === newItem.type
+      );
+      console.log('Comparing items:', prevItems.map(i => ({ name: i.name, type: i.type })), 'with', { name: newItem.name, type: newItem.type }, 'Index:', index);
       if (index > -1) {
         const updatedItems = [...prevItems];
         updatedItems[index].quantity += 1;
+        console.log('Updated cartItems (existing item):', updatedItems);
         return updatedItems;
       }
-      return [...prevItems, { ...newItem, quantity: 1 }];
+      const updatedItems = [...prevItems, { ...newItem, quantity: 1 }];
+      console.log('Updated cartItems (new item):', updatedItems);
+      return updatedItems;
     });
   };
 
@@ -25,28 +36,34 @@ export const CartProvider = ({ children }) => {
       }
       const updated = [...prevItems];
       updated[index] = { ...updated[index], quantity };
+      console.log('Updated cartItems (quantity):', updated);
       return updated;
     });
   };
 
   const removeItem = (index) => {
-    setCartItems((prevItems) => prevItems.filter((_, i) => i !== index));
+    setCartItems((prevItems) => {
+      const updated = prevItems.filter((_, i) => i !== index);
+      console.log('Updated cartItems (removed):', updated);
+      return updated;
+    });
   };
 
   const clearCart = () => {
     setCartItems([]);
+    console.log('Cart cleared');
   };
 
+  const contextValue = useMemo(() => ({
+    cartItems,
+    addToCart,
+    updateQuantity,
+    removeItem,
+    clearCart,
+  }), [cartItems]);
+
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        updateQuantity,
-        removeItem,
-        clearCart,
-      }}
-    >
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );
